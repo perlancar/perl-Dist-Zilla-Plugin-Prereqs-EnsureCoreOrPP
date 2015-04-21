@@ -1,5 +1,11 @@
 Revision history for Dist-Zilla-Plugin-Prereqs-EnsureCoreOrPP
 
+0.03    2015-04-21 (PERLANCAR)
+
+	- [Bugfix] Incorrect usage of is_still_core (must be called as
+          Module::CoreList::More->is_still_core).
+
+
 0.02    2015-04-21 (PERLANCAR)
 
 	- Fix logic, add DZP:Prereqs::EnsurePP.
