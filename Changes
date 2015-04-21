@@ -1,5 +1,10 @@
 Revision history for Dist-Zilla-Plugin-Prereqs-EnsureCoreOrPP
 
+0.04    2015-04-21 (PERLANCAR)
+
+	- [ux] Show all errors before bailing out.
+
+
 0.03    2015-04-21 (PERLANCAR)
 
 	- [Bugfix] Incorrect usage of is_still_core (must be called as
