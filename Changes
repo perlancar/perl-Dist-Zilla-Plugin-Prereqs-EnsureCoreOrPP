@@ -1,5 +1,10 @@
 Revision history for Dist-Zilla-Plugin-Prereqs-EnsureCoreOrPP
 
+0.02    2015-04-21 (PERLANCAR)
+
+	- Fix logic, add DZP:Prereqs::EnsurePP.
+
+
 0.01     2015-04-21 (PERLANCAR) - Happy Kartiny Day
 
          - First release.
