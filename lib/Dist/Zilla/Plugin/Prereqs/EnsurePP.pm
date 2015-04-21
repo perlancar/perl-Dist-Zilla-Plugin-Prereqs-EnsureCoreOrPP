@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP;
+package Dist::Zilla::Plugin::Prereqs::EnsurePP;
 
 # DATE
 # VERSION
@@ -12,7 +12,6 @@ with 'Dist::Zilla::Role::InstallTool';
 
 use IPC::System::Options qw(backtick);
 use JSON;
-use Module::CoreList::More qw(is_still_core);
 use Module::Path::More qw(module_path);
 use Module::XSOrPP qw(is_pp);
 use namespace::autoclean;
@@ -36,15 +35,15 @@ sub setup_installer {
         if (!module_path(module=>$mod)) {
             $self->log_fatal(["Prerequisite %s is not installed", $mod]);
         }
-        if (!is_pp($mod) && !is_still_core($mod)) {
-            $self->log_fatal(["Prerequisite %s is not PP nor core", $mod]);
+        if (!is_pp($mod)) {
+            $self->log_fatal(["Prerequisite %s is not PP", $mod]);
         }
     }
 }
 
 __PACKAGE__->meta->make_immutable;
 1;
-# ABSTRACT: Make sure that prereqs (and their deps) are all core/PP modules
+# ABSTRACT: Make sure that prereqs (and their deps) are all PP modules
 
 =for Pod::Coverage .+
 
@@ -52,15 +51,15 @@ __PACKAGE__->meta->make_immutable;
 
 In dist.ini:
 
- [Prereqs::EnsureCoreOrPP]
+ [Prereqs::EnsurePP]
 
 
 =head1 DESCRIPTION
 
 This plugin will check that all RuntimeRequires prereqs (and all their recursive
-RuntimeRequires deps) are all core/PP modules. To do this checking, all prereqs
-must be installed during build time and they all must be indexed by CPAN. Also,
-a reasonably fresh local CPAN mirror indexed (produced by L<App::lcpan>) is
+RuntimeRequires deps) are all PP modules. To do this checking, all prereqs must
+be installed during build time and they all must be indexed by CPAN. Also, a
+reasonably fresh local CPAN mirror indexed (produced by L<App::lcpan>) is
 required.
 
 I need this when building a dist that needs to be included in a fatpacked
@@ -75,7 +74,7 @@ because I don't always use "dzil release" (i.e. during offline deployment, I
 
 L<App::FatPacker>, L<App::fatten>
 
-L<Dist::Zilla::Plugin::Prereqs::EnsurePP>
+L<Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP>
 
 Related plugins: L<Dist::Zilla::Plugin::CheckPrereqsIndexed>,
 L<Dist::Zilla::Plugin::EnsurePrereqsInstalled>,
