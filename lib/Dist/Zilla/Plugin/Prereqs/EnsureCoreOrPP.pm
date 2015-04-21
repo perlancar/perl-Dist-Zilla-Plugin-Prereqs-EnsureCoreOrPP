@@ -30,6 +30,7 @@ sub setup_installer {
     my $res = backtick({die=>1}, @cmd);
     $res = JSON->new->decode($res);
     $self->log(["Prereqs: %s", $res]);
+    my $has_err;
     for my $entry (@$res) {
         my $mod = $entry->{module};
         $mod =~ s/^\s+//;
@@ -37,8 +38,13 @@ sub setup_installer {
             $self->log_fatal(["Prerequisite %s is not installed", $mod]);
         }
         if (!is_pp($mod) && !Module::CoreList::More->is_still_core($mod)) {
-            $self->log_fatal(["Prerequisite %s is not PP nor core", $mod]);
+            $has_err++;
+            $self->log(["Prerequisite %s is not PP nor core", $mod]);
         }
+    }
+
+    if ($has_err) {
+        $self->log_fatal(["There are some errors in prerequisites"]);
     }
 }
 
