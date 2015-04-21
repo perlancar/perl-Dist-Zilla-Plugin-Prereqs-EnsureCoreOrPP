@@ -8,22 +8,37 @@ use strict;
 use warnings;
 
 use Moose;
-with 'Dist::Zilla::Role::AfterBuild';
+with 'Dist::Zilla::Role::InstallTool';
 
+use IPC::System::Options qw(backtick);
+use JSON;
+use Module::Path::More qw(module_path);
 use Module::XSOrPP qw(is_pp);
 use namespace::autoclean;
 
-sub after_build {
+sub setup_installer {
     my ($self) = @_;
 
     my $prereqs_hash = $self->zilla->prereqs->as_string_hash;
     my $rr_prereqs = $prereqs_hash->{runtime}{requires} // {};
 
-    for my $mod (keys %$rr_prereqs) {
-
+    $self->log(["Listing prereqs ..."]);
+    my @cmd = ("lcpan", "deps", "-R", "--json",
+               grep {$_ ne 'perl'} keys %$rr_prereqs);
+    $self->log(["cmd: %s", \@cmd]);
+    my $res = backtick({die=>1}, @cmd);
+    $res = JSON->new->decode($res);
+    $self->log(["Prereqs: %s", $res]);
+    for my $entry (@$res) {
+        my $mod = $entry->{module};
+        $mod =~ s/^\s+//;
+        if (!module_path(module=>$mod)) {
+            $self->log_fatal(["Prerequisite %s is not installed", $mod]);
+        }
+        if (!is_pp($mod)) {
+            $self->log_fatal(["Prerequisite %s is not PP", $mod]);
+        }
     }
-
-    die;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -50,16 +65,16 @@ required.
 I need this when building a dist that needs to be included in a fatpacked
 script.
 
-Note: I put this plugin in after_build phase instead of before_release because
-I don't always use "dzil release" (i.e. during offline deployment, I "dzil
-build" and "pause upload" separately.)
+Note: I put this plugin in setup_installer phase instead of before_release
+because I don't always use "dzil release" (i.e. during offline deployment, I
+"dzil build" and "pause upload" separately.)
 
 
 =head1 SEE ALSO
 
 L<App::FatPacker>, L<App::fatten>
 
-L<Dist::Zilla::Plugin::Prereqs::EnsurePP>
+Dist::Zilla::Plugin::Prereqs::EnsurePP
 
 Related plugins: L<Dist::Zilla::Plugin::CheckPrereqsIndexed>,
 L<Dist::Zilla::Plugin::EnsurePrereqsInstalled>,
