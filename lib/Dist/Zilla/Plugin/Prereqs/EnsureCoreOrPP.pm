@@ -12,7 +12,7 @@ with 'Dist::Zilla::Role::InstallTool';
 
 use IPC::System::Options qw(backtick);
 use JSON;
-use Module::CoreList::More qw(is_still_core);
+use Module::CoreList::More;
 use Module::Path::More qw(module_path);
 use Module::XSOrPP qw(is_pp);
 use namespace::autoclean;
@@ -36,7 +36,7 @@ sub setup_installer {
         if (!module_path(module=>$mod)) {
             $self->log_fatal(["Prerequisite %s is not installed", $mod]);
         }
-        if (!is_pp($mod) && !is_still_core($mod)) {
+        if (!is_pp($mod) && !Module::CoreList::More->is_still_core($mod)) {
             $self->log_fatal(["Prerequisite %s is not PP nor core", $mod]);
         }
     }
