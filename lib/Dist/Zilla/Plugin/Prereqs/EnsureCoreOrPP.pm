@@ -10,8 +10,7 @@ use warnings;
 use Moose;
 with 'Dist::Zilla::Role::InstallTool';
 
-use IPC::System::Options qw(backtick);
-use JSON;
+use App::lcpan::Call qw(call_lcpan_script);
 use Module::CoreList::More;
 use Module::Path::More qw(module_path);
 use Module::XSOrPP qw(is_pp);
@@ -24,12 +23,9 @@ sub setup_installer {
     my $rr_prereqs = $prereqs_hash->{runtime}{requires} // {};
 
     $self->log(["Listing prereqs ..."]);
-    my @cmd = ("lcpan", "deps", "-R", "--json",
-               grep {$_ ne 'perl'} keys %$rr_prereqs);
-    $self->log(["cmd: %s", \@cmd]);
-    my $res = backtick({die=>1}, @cmd);
-    $res = JSON->new->decode($res);
-    $self->log(["Prereqs: %s", $res]);
+    my $res = call_lcpan_script(argv=>[
+        "deps", "-R",
+        grep {$_ ne 'perl'} keys %$rr_prereqs]);
     my $has_err;
     for my $entry (@$res) {
         my $mod = $entry->{module};
