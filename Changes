@@ -1,5 +1,12 @@
 Revision history for Dist-Zilla-Plugin-Prereqs-EnsureCoreOrPP
 
+0.05    2015-05-15 (PERLANCAR)
+
+	- No functional changes.
+
+	- Use App::lcpan::Call.
+
+
 0.04    2015-04-21 (PERLANCAR)
 
 	- [ux] Show all errors before bailing out.
