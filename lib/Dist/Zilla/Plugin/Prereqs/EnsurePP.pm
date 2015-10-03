@@ -74,7 +74,7 @@ because I don't always use "dzil release" (i.e. during offline deployment, I
 
 =head1 SEE ALSO
 
-L<App::FatPacker>, L<App::fatten>
+L<App::FatPacker>, L<App::depak>
 
 L<Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP>
 
