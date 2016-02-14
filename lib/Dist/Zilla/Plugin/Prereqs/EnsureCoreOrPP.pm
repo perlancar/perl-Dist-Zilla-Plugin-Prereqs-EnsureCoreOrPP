@@ -26,8 +26,10 @@ sub setup_installer {
     my $res = call_lcpan_script(argv=>[
         "deps", "-R",
         grep {$_ ne 'perl'} keys %$rr_prereqs]);
+    $self->log_fatal(["Can't lcpan deps: %s - %s", $res->[0], $res->[1]])
+        unless $res->[0] == 200;
     my $has_err;
-    for my $entry (@$res) {
+    for my $entry (@{$res->[2]}) {
         my $mod = $entry->{module};
         $mod =~ s/^\s+//;
         if (!module_path(module=>$mod)) {
