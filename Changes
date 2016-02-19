@@ -1,5 +1,10 @@
 Revision history for Dist-Zilla-Plugin-Prereqs-EnsureCoreOrPP
 
+0.09    2016-02-19 (PERLANCAR)
+
+	- [Bugfix] Do not regard prerequisite 'perl' as a module.
+
+
 0.08    2016-02-14 (PERLANCAR)
 
 	- No functional changes.
