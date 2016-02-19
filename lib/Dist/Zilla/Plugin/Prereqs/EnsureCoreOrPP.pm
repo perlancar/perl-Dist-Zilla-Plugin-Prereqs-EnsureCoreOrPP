@@ -32,6 +32,7 @@ sub setup_installer {
     for my $entry (@{$res->[2]}) {
         my $mod = $entry->{module};
         $mod =~ s/^\s+//;
+        next if $mod eq 'perl';
         if (!module_path(module=>$mod)) {
             $self->log_fatal(["Prerequisite %s is not installed", $mod]);
         }
