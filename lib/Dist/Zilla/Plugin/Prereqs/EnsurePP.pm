@@ -65,22 +65,12 @@ be installed during build time and they all must be indexed by CPAN. Also, a
 reasonably fresh local CPAN mirror indexed (produced by L<App::lcpan>) is
 required.
 
-I need this when building a dist that needs to be included in a fatpacked
-script.
-
-Note: I put this plugin in setup_installer phase instead of before_release
-because I don't always use "dzil release" (i.e. during offline deployment, I
-"dzil build" and "pause upload" separately.)
-
 
 =head1 SEE ALSO
 
-L<App::FatPacker>, L<App::depak>
-
 L<Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP>
 
-Related plugins: L<Dist::Zilla::Plugin::CheckPrereqsIndexed>,
-L<Dist::Zilla::Plugin::EnsurePrereqsInstalled>,
-L<Dist::Zilla::Plugin::OnlyCorePrereqs>
+L<Dist::Zilla::Plugin::Prereqs::EnsureCore>
 
-L<App::lcpan>, L<lcpan>
+L<Dist::Zilla::Plugin::CheckPrereqsIndexed>,
+L<Dist::Zilla::Plugin::EnsurePrereqsInstalled>

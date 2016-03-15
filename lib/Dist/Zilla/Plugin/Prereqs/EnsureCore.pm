@@ -13,7 +13,6 @@ with 'Dist::Zilla::Role::InstallTool';
 use App::lcpan::Call qw(call_lcpan_script);
 use Module::CoreList::More;
 use Module::Path::More qw(module_path);
-use Module::XSOrPP qw(is_pp);
 use namespace::autoclean;
 
 sub setup_installer {
@@ -33,12 +32,9 @@ sub setup_installer {
         my $mod = $entry->{module};
         $mod =~ s/^\s+//;
         next if $mod eq 'perl';
-        if (!module_path(module=>$mod)) {
-            $self->log_fatal(["Prerequisite %s is not installed", $mod]);
-        }
-        if (!is_pp($mod) && !Module::CoreList::More->is_still_core($mod)) {
+        if (!Module::CoreList::More->is_still_core($mod)) {
             $has_err++;
-            $self->log(["Prerequisite %s is not PP nor core", $mod]);
+            $self->log(["Prerequisite %s is not core", $mod]);
         }
     }
 
@@ -49,43 +45,31 @@ sub setup_installer {
 
 __PACKAGE__->meta->make_immutable;
 1;
-# ABSTRACT: Make sure that prereqs (and their deps) are all core/PP modules
+# ABSTRACT: Make sure that prereqs (and their deps) are all core modules
 
 =for Pod::Coverage .+
 
 =head1 SYNOPSIS
 
-In dist.ini:
+In F<dist.ini>:
 
- [Prereqs::EnsureCoreOrPP]
+ [Prereqs::EnsureCore]
 
 
 =head1 DESCRIPTION
 
 This plugin will check that all RuntimeRequires prereqs (and all their recursive
-RuntimeRequires deps) are all core/PP modules. To do this checking, all prereqs
-must be installed during build time and they all must be indexed by CPAN. Also,
-a reasonably fresh local CPAN mirror indexed (produced by L<App::lcpan>) is
-required.
-
-I need this when building a dist that needs to be included in a fatpacked
-script.
-
-Note: I put this plugin in setup_installer phase instead of before_release
-because I don't always use "dzil release" (i.e. during offline deployment, I
-"dzil build" and "pause upload" separately.)
+RuntimeRequires deps) are all core modules. To do this checking, they all must
+be indexed by CPAN. Also, a reasonably fresh local CPAN mirror indexed (produced
+by L<App::lcpan>) is required.
 
 
 =head1 SEE ALSO
 
-L<App::FatPacker>, L<App::depak>
-
-L<Dist::Zilla::Plugin::Prereqs::EnsureCore>
+L<Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP>
 
 L<Dist::Zilla::Plugin::Prereqs::EnsurePP>
 
-Related plugins: L<Dist::Zilla::Plugin::CheckPrereqsIndexed>,
+L<Dist::Zilla::Plugin::CheckPrereqsIndexed>,
 L<Dist::Zilla::Plugin::EnsurePrereqsInstalled>,
 L<Dist::Zilla::Plugin::OnlyCorePrereqs>
-
-L<App::lcpan>, L<lcpan>
