@@ -1,6 +1,8 @@
 package Dist::Zilla::Plugin::Prereqs::EnsurePP;
 
+# AUTHORITY
 # DATE
+# DIST
 # VERSION
 
 use 5.010001;
@@ -24,7 +26,7 @@ sub setup_installer {
     $self->log(["Listing prereqs ..."]);
     my $res = call_lcpan_script(argv=>[
         "deps", "-R",
-        grep {$_ ne 'perl'} keys %$rr_prereqs]);
+        grep {$_ ne 'perl'} map {("--module", "$_")} keys %$rr_prereqs]);
     my $has_err;
     for my $entry (@$res) {
         my $mod = $entry->{module};

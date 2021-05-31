@@ -1,6 +1,8 @@
 package Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP;
 
+# AUTHORITY
 # DATE
+# DIST
 # VERSION
 
 use 5.010001;
@@ -25,7 +27,7 @@ sub setup_installer {
     $self->log(["Listing prereqs ..."]);
     my $res = call_lcpan_script(argv=>[
         "deps", "-R",
-        grep {$_ ne 'perl'} keys %$rr_prereqs]);
+        grep {$_ ne 'perl'} map {("--module", "$_")} keys %$rr_prereqs]);
     $self->log_fatal(["Can't lcpan deps: %s - %s", $res->[0], $res->[1]])
         unless $res->[0] == 200;
     my $has_err;
