@@ -1,3 +1,9 @@
+0.100   2021-05-31  Released-By: PERLANCAR; Urgency: medium
+
+	- [bugfix] Use --module option of 'lcpan deps' when we want to
+	  specify module names instead of distribution names.
+
+
 0.09    2016-02-19  Released-By: PERLANCAR
 
 	- [Bugfix] Do not regard prerequisite 'perl' as a module.

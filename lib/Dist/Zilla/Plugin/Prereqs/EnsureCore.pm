@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::Prereqs::EnsureCoreOrPP;
+package Dist::Zilla::Plugin::Prereqs::EnsureCore;
 
 # AUTHORITY
 # DATE
